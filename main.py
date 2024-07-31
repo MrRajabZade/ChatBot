@@ -6,14 +6,25 @@ import random
 memory = {}
 history = []
 reply = False
+stepwords = []
 
 def save_data(key, value):
     memory[key] = value
+
+def step_words(stepwords, text):
+    for i in stepwords:
+        text = str(text).replace(str(i), "")
+    return text
 
 def handle_data(data):
     for line in data.split("\n"):
         parts = line.split(" = ")
         if len(parts) == 2:
+            if parts[0] == "stepwords":
+                i = str(parts[1].split("[", 1)[1].split("]", 1)[0])
+                i = i.split(",")
+                for n in i:
+                    stepwords.append(str(n))
             save_data(parts[0], parts[1])    
 
 def replace_placeholders(response, memory):
@@ -64,7 +75,7 @@ def respond_to_user(input_text):
         if "{" in pattern:
             i = str(pattern.split("{", 1)[1].split("}", 1)[0])
             g = "{"+str(i)+"}"
-            i = i.split(",")
+            i = i.split("،")
             regex_pattern = pattern.split(str(g))
             for e in i:
                 u = str(regex_pattern[0]+str(e)+regex_pattern[1])
@@ -102,6 +113,7 @@ def send():
     chat_area.insert(tk.END, "شما: " + user_input + "\n")
     entry.delete(0, tk.END)
     
+    user_input = step_words(stepwords, user_input)
     response = respond_to_user(user_input)
     
     if response:
