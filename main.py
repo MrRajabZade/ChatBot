@@ -33,11 +33,11 @@ def respond_to_user(input_text):
     for ruls in ruls:
         if str(ruls) == "":
             continue
-        pattern, response = ruls.split(" : ")
+        pattern, response = ruls.split(" : ", 1)
         input_text = str(input_text).replace("ي", "ی")
         if reply:
             try:
-                pattern, response = reply.split(" & ", 1)
+                pattern, response = reply.split(" : ", 1)
             except:
                 key, value = reply.split(" = ")
                 save_data(key, value)
