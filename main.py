@@ -6,12 +6,13 @@ import random
 memory = {}
 history = []
 reply = False
-stopwords = []
 
 def save_data(key, value):
     memory[key] = value
 
-def stop_words(stopwords, text):
+def stop_words(text):
+    stopwords = open("stopwords.txt","r", encoding="utf-8").read().split("\n")
+    print(stopwords)
     for i in stopwords:
         text = str(text).replace(str(i), "")
     return text
@@ -20,11 +21,6 @@ def handle_data(data):
     for line in data.split("\n"):
         parts = line.split(" = ")
         if len(parts) == 2:
-            if parts[0] == "stepwords":
-                i = str(parts[1].split("[", 1)[1].split("]", 1)[0])
-                i = i.split(",")
-                for n in i:
-                    stopwords.append(str(n))
             save_data(parts[0], parts[1])    
 
 def replace_placeholders(response, memory):
@@ -41,6 +37,7 @@ def respond_to_user(input_text):
     file = str(open("rulse.txt", "r", encoding="utf-8").read()).split("+")
     handle_data(file[0])
     ruls = file[1].split("\n")
+    print(input_text)
     for ruls in ruls:
         if str(ruls) == "":
             continue
@@ -113,7 +110,7 @@ def send():
     chat_area.insert(tk.END, "شما: " + user_input + "\n")
     entry.delete(0, tk.END)
     
-    user_input = stop_words(stopwords, user_input)
+    user_input = stop_words(user_input)
     response = respond_to_user(user_input)
     
     if response:
