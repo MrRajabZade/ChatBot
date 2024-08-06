@@ -99,10 +99,7 @@ def save_history(user_input, bot_response):
 def send():
     user_input = entry.get()
     user_input = user_input.lower()
-    if user_input in ['exit', 'quit', 'خداحافظ']:
-        chat_area.insert(tk.END, "شما: " + user_input + "\n")
-        chat_area.insert(tk.END, "بات: خداحافظ!\n")
-        entry.delete(0, tk.END)
+    if user_input in ['exit', 'quit']:
         root.quit()
         return
 
@@ -124,13 +121,19 @@ def send():
 root = tk.Tk()
 root.title("چت‌بات")
 
+# Configure the rows and columns for responsive design
+root.rowconfigure(0, weight=1)
+root.rowconfigure(1, weight=0)
+root.rowconfigure(2, weight=0)
+root.columnconfigure(0, weight=1)
+
 chat_area = scrolledtext.ScrolledText(root, state='disabled', height=20, width=70)
-chat_area.grid(column=0, row=0)
+chat_area.grid(column=0, row=0, sticky="nsew")
 
 entry = tk.Entry(root, width=50)
-entry.grid(column=0, row=1)
+entry.grid(column=0, row=1, sticky="ew")
 
 send_button = tk.Button(root, text="ارسال", command=send)
-send_button.grid(column=0, row=2)
+send_button.grid(column=0, row=2, sticky="ew")
 
 root.mainloop()
